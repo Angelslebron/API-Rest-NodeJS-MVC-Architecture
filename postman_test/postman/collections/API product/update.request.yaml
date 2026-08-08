@@ -1,0 +1,30 @@
+$kind: http-request
+name: update
+url: http://localhost:3000/api/productos/6a7689f1888ee7c17e95afb1/
+method: PUT
+body:
+  type: json
+  content: "{\r
+
+    \    \"_id\": \"6a7689f1888ee7c17e95afb1\",\r
+
+    \    \"nombre\": \"Laptop DELL\",\r
+
+    \    \"descripcion\": \"intel 7\",\r
+
+    \    \"precio\": 9800,\r
+
+    \    \"categoria\": \"Computadoras\",\r
+
+    \    \"stock\": 1,\r
+
+    \    \"disponible\": true,\r
+
+    \    \"createdAt\": \"2026-08-08T01:44:17.242Z\",\r
+
+    \    \"updatedAt\": \"2026-08-08T01:44:17.242Z\",\r
+
+    \    \"__v\": 0\r
+
+    }"
+order: 1909094337077528

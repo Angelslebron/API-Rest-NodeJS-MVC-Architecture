@@ -1,0 +1,23 @@
+$kind: http-request
+name: http://localhost:3000/api/productos/6a7689f1888ee7c17e95afb1
+description: ""
+url: http://localhost:3000/api/productos/6a7689f1888ee7c17e95afb1
+method: DELETE
+body:
+  type: json
+  content: "{\r
+
+    \  \"nombre\": \"Laptop HP\",\r
+
+    \  \"descripcion\": \"Ryzen 7\",\r
+
+    \  \"precio\": 45000,\r
+
+    \  \"categoria\": \"Computadoras\",\r
+
+    \  \"stock\": 10,\r
+
+    \  \"disponible\": true\r
+
+    }"
+order: 1945418169175464
