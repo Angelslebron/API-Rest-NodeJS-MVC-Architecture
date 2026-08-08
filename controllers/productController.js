@@ -1,81 +1,140 @@
-const Producto = require('../models/Producto');
+const Product = require('../models/Product');
 
-const obtenerProductos = async (req, res) => {
-  try {
-    const productos = await Producto.find();
-    res.status(200).json({ exito: true, total: productos.length, data: productos });
-  } catch (error) {
-    res.status(500).json({ exito: false, mensaje: 'Error al obtener los productos', error: error.message });
-  }
+
+// GET all
+const getProducts = async (req, res) => {
+    try {
+        const products = await Product.find();
+
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
 };
 
-const obtenerProductoPorId = async (req, res) => {
-  try {
-    const producto = await Producto.findById(req.params.id);
-    if (!producto) {
-      return res.status(404).json({ exito: false, mensaje: 'Producto no encontrado' });
+
+// GET por ID
+const getProductById = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+
+        if (!product) {
+            return res.status(404).json({
+                message: 'Producto no encontrado'
+            });
+        }
+
+        res.status(200).json(product);
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
     }
-    res.status(200).json({ exito: true, data: producto });
-  } catch (error) {
-    if (error.name === 'CastError') {
-      return res.status(400).json({ exito: false, mensaje: 'ID de producto inválido' });
-    }
-    res.status(500).json({ exito: false, mensaje: 'Error al obtener el producto', error: error.message });
-  }
 };
 
-const crearProducto = async (req, res) => {
-  try {
-    const { nombre, descripcion, precio, categoria, stock, disponible } = req.body;
-    const nuevoProducto = new Producto({ nombre, descripcion, precio, categoria, stock, disponible });
-    const productoGuardado = await nuevoProducto.save();
-    res.status(201).json({ exito: true, mensaje: 'Producto creado exitosamente', data: productoGuardado });
-  } catch (error) {
-    if (error.name === 'ValidationError') {
-      const errores = Object.values(error.errors).map((err) => err.message);
-      return res.status(400).json({ exito: false, mensaje: 'Error de validación', errores });
+
+// POST
+const createProduct = async (req, res) => {
+
+    try {
+
+        const {
+            nombre,
+            descripcion,
+            precio,
+            categoria,
+            stock,
+            disponible
+        } = req.body;
+
+        const product = new Product({
+            nombre,
+            descripcion,
+            precio,
+            categoria,
+            stock,
+            disponible
+        });
+
+        const newProduct = await product.save();
+
+        res.status(201).json(newProduct);
+
+    } catch (error) {
+
+        res.status(400).json({
+            message: error.message
+        });
     }
-    res.status(500).json({ exito: false, mensaje: 'Error al crear el producto', error: error.message });
-  }
 };
 
-const actualizarProducto = async (req, res) => {
-  try {
-    const { nombre, descripcion, precio, categoria, stock, disponible } = req.body;
-    const productoActualizado = await Producto.findByIdAndUpdate(
-      req.params.id,
-      { nombre, descripcion, precio, categoria, stock, disponible },
-      { new: true, runValidators: true }
-    );
-    if (!productoActualizado) {
-      return res.status(404).json({ exito: false, mensaje: 'Producto no encontrado' });
+
+// PUT
+const updateProduct = async (req, res) => {
+
+    try {
+
+        const updatedProduct = await Product.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            {
+                new: true,
+                runValidators: true
+            }
+        );
+
+        if (!updatedProduct) {
+            return res.status(404).json({
+                message: 'Producto no encontrado'
+            });
+        }
+
+        res.status(200).json(updatedProduct);
+
+    } catch (error) {
+
+        res.status(400).json({
+            message: error.message
+        });
     }
-    res.status(200).json({ exito: true, mensaje: 'Producto actualizado exitosamente', data: productoActualizado });
-  } catch (error) {
-    if (error.name === 'ValidationError') {
-      const errores = Object.values(error.errors).map((err) => err.message);
-      return res.status(400).json({ exito: false, mensaje: 'Error de validación', errores });
-    }
-    if (error.name === 'CastError') {
-      return res.status(400).json({ exito: false, mensaje: 'ID de producto inválido' });
-    }
-    res.status(500).json({ exito: false, mensaje: 'Error al actualizar el producto', error: error.message });
-  }
 };
 
-const eliminarProducto = async (req, res) => {
-  try {
-    const productoEliminado = await Producto.findByIdAndDelete(req.params.id);
-    if (!productoEliminado) {
-      return res.status(404).json({ exito: false, mensaje: 'Producto no encontrado' });
+
+// DELETE
+const deleteProduct = async (req, res) => {
+
+    try {
+
+        const deletedProduct = await Product.findByIdAndDelete(
+            req.params.id
+        );
+
+        if (!deletedProduct) {
+            return res.status(404).json({
+                message: 'Producto no encontrado'
+            });
+        }
+
+        res.status(200).json({
+            message: 'Producto eliminado correctamente'
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        });
     }
-    res.status(200).json({ exito: true, mensaje: 'Producto eliminado exitosamente', data: productoEliminado });
-  } catch (error) {
-    if (error.name === 'CastError') {
-      return res.status(400).json({ exito: false, mensaje: 'ID de producto inválido' });
-    }
-    res.status(500).json({ exito: false, mensaje: 'Error al eliminar el producto', error: error.message });
-  }
 };
 
-module.exports = { obtenerProductos, obtenerProductoPorId, crearProducto, actualizarProducto, eliminarProducto };
+
+module.exports = {
+    getProducts,
+    getProductById,
+    createProduct,
+    updateProduct,
+    deleteProduct
+};
