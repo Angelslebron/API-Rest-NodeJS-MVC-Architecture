@@ -1,12 +1,19 @@
 services:
+
   mongo:
     image: mongo:7
-    container_name: mongo-productos
+    container_name: mongodb-productos
+
+    restart: always
+
     ports:
       - "27017:27017"
+
+    environment:
+      MONGO_INITDB_DATABASE: productosdb
+
     volumes:
-      - mongo-data:/data/db
-    restart: unless-stopped
+      - mongo_data:/data/db
 
 volumes:
-  mongo-data:
+  mongo_data:

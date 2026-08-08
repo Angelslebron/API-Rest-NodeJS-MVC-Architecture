@@ -1,0 +1,8 @@
+$kind: http-request
+name: Create
+url: http://localhost:3000/api/productos
+method: POST
+body:
+  type: json
+  content: ""
+order: 74191330585785
